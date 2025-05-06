@@ -8,6 +8,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -36,5 +37,18 @@ class CustomerRepositoryTest {
                 .ignoringFields("createdAt")
                 .isEqualTo(List.of(customer1, customer2, customer3));
 
+    }
+    @Test
+    void findById(){
+        Customer customer1 = new Customer(1, null, "username1", "firstname1","lastname1", "123","City", "company1");
+
+        customerRepository.save(customer1);
+
+        Optional<Customer> customer = customerRepository.findById(1);
+
+        assertThat(customer.orElseThrow())
+                .usingRecursiveComparison()
+                .ignoringFields("createdAt")
+                .isEqualTo(customer1);
     }
 }

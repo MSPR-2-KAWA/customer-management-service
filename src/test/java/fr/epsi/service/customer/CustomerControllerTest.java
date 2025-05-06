@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -40,6 +42,27 @@ public class CustomerControllerTest {
                     .andExpect(jsonPath("$[0].username").value("username1"))
                     .andExpect(jsonPath("$[1].username").value("username2"))
                     .andExpect(jsonPath("$[2].username").value("username3"));
+        }
+    }
+
+    @Nested
+    class getCustomersById{
+        @Test
+        void shouldReturnCustomer() throws Exception {
+            Customer customer1 = new Customer(1, null, "username1", "firstname1","lastname1", "123","City", "company1");
+            when(customerService.getById(1)).thenReturn(customer1);
+
+            mockMvc.perform(get("/api/customers/1"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.username").value("username1"));
+        }
+        @Test
+        void shouldReturnNotFound() throws Exception {
+            when(customerService.getById(999)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer 999 not found"));
+
+            mockMvc.perform(get("/api/customers/999"))
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().string("Customer 999 not found"));
         }
     }
 }
