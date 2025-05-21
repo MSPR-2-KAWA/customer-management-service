@@ -1,5 +1,6 @@
 package fr.epsi.service.customer;
 
+import fr.epsi.service.customer.dto.CustomerDTO;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +63,65 @@ public class CustomerServiceTest {
             assertThrows(ResponseStatusException.class, () -> {
                 customerService.getById(1);
             });
+        }
+    }
+
+    @Nested
+    class update{
+        @Test
+        void shouldUpdateCustomer() {
+
+            Integer id = 1;
+            Customer existingCustomer = new Customer(id, LocalDateTime.now(), "oldUsername", "oldFirst", "oldLast", "00000", "OldCity", "OldCompany");
+            CustomerDTO updateDto = new CustomerDTO("newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
+            Customer expectedCustomer = new Customer(id, existingCustomer.getCreatedAt(), "newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
+
+            when(customerRepository.findById(id)).thenReturn(Optional.of(existingCustomer));
+            when(customerRepository.save(expectedCustomer)).thenReturn(expectedCustomer);
+
+            Customer result = customerService.update(id, updateDto);
+
+            assertEquals(expectedCustomer.getId(), result.getId());
+            assertEquals(expectedCustomer.getCreatedAt(), result.getCreatedAt());
+            assertEquals(expectedCustomer.getUsername(), result.getUsername());
+            assertEquals(expectedCustomer.getFirstName(), result.getFirstName());
+            assertEquals(expectedCustomer.getLastName(), result.getLastName());
+            assertEquals(expectedCustomer.getPostalCode(), result.getPostalCode());
+            assertEquals(expectedCustomer.getCity(), result.getCity());
+            assertEquals(expectedCustomer.getCompanyName(), result.getCompanyName());
+        }
+    }
+
+    @Nested
+    class create{
+        @Test
+        void shouldCreateCustomer() {
+
+            Integer id = 1;
+            Customer expectedCustomer = new Customer(id, LocalDateTime.now(), "newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
+            CustomerDTO createCustomerDTO = new CustomerDTO("newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
+            Customer expectSave = new Customer(
+                    createCustomerDTO.getUsername(),
+                    createCustomerDTO.getFirstName(),
+                    createCustomerDTO.getLastName(),
+                    createCustomerDTO.getPostalCode(),
+                    createCustomerDTO.getCity(),
+                    createCustomerDTO.getCompanyName()
+            );
+
+
+            when(customerRepository.save(expectSave)).thenReturn(expectedCustomer);
+
+            Customer result = customerService.create(createCustomerDTO);
+
+            assertEquals(expectedCustomer.getId(), result.getId());
+            assertEquals(expectedCustomer.getCreatedAt(), result.getCreatedAt());
+            assertEquals(expectedCustomer.getUsername(), result.getUsername());
+            assertEquals(expectedCustomer.getFirstName(), result.getFirstName());
+            assertEquals(expectedCustomer.getLastName(), result.getLastName());
+            assertEquals(expectedCustomer.getPostalCode(), result.getPostalCode());
+            assertEquals(expectedCustomer.getCity(), result.getCity());
+            assertEquals(expectedCustomer.getCompanyName(), result.getCompanyName());
         }
     }
 }

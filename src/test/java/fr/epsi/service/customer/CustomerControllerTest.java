@@ -1,5 +1,6 @@
 package fr.epsi.service.customer;
 
+import fr.epsi.service.customer.dto.CustomerDTO;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -61,6 +66,58 @@ public class CustomerControllerTest {
             when(customerService.getById(999)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer 999 not found"));
 
             mockMvc.perform(get("/api/customers/999"))
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().string("Customer 999 not found"));
+        }
+    }
+
+    @Nested
+    class updateCustomerById{
+        @Test
+        void shouldUpdateCustomerAndReturnIt() throws Exception {
+            Integer id = 1;
+            Customer updatedCustomer = new Customer(id, LocalDateTime.now(), "newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
+
+            when(customerService.update(eq(id), any(CustomerDTO.class))).thenReturn(updatedCustomer);
+
+             mockMvc.perform(put("/api/customers/1")
+                            .contentType("application/json")
+                            .content("""
+                                    {
+                                        "username": "newUsername",
+                                        "firstName": "newFirst",
+                                        "lastName": "newLast",
+                                        "postalCode": "12345",
+                                        "city": "NewCity",
+                                        "companyName": "NewCompany"
+                                    }
+                                    """))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.username").value("newUsername"))
+                    .andExpect(jsonPath("$.firstName").value("newFirst"))
+                    .andExpect(jsonPath("$.lastName").value("newLast"))
+                    .andExpect(jsonPath("$.postalCode").value("12345"))
+                    .andExpect(jsonPath("$.city").value("NewCity"))
+                    .andExpect(jsonPath("$.companyName").value("NewCompany"));
+        }
+        @Test
+        void shouldReturnNotFoundWhenCustomerDoesNotExist() throws Exception {
+            Integer id = 999;
+            when(customerService.update(eq(id), any(CustomerDTO.class)))
+                    .thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer 999 not found"));
+
+            mockMvc.perform(put("/api/customers/999")
+                            .contentType("application/json")
+                            .content("""
+                                {
+                                    "username": "username",
+                                    "firstName": "first",
+                                    "lastName": "last",
+                                    "postalCode": "00000",
+                                    "city": "City",
+                                    "companyName": "Company"
+                                }
+                                """))
                     .andExpect(status().isNotFound())
                     .andExpect(content().string("Customer 999 not found"));
         }

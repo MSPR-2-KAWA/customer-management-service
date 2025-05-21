@@ -35,4 +35,13 @@ public class Customer {
 
     @Column(name = "company_name")
     private String companyName;
+
+    public Customer(String username, String firstName, String lastName, String postalCode, String city, String companyName) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.companyName = companyName;
+    }
 }

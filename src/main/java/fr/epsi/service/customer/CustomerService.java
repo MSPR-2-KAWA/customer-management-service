@@ -1,5 +1,6 @@
 package fr.epsi.service.customer;
 
+import fr.epsi.service.customer.dto.CustomerDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,37 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-     public List<Customer> getAll(){
-         return customerRepository.findAll();
-     }
+    public List<Customer> getAll() {
+        return customerRepository.findAll();
+    }
 
-    public Customer getById(Integer id){
+    public Customer getById(Integer id) {
         return customerRepository.findById(id).orElseThrow(
-                ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer "+ id +" not found") );
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer " + id + " not found"));
+    }
+
+    public Customer update(Integer id, CustomerDTO updateCustomerDTO) {
+        Customer dbCustomer = getById(id);
+        return customerRepository.save(new Customer(
+                dbCustomer.getId(),
+                dbCustomer.getCreatedAt(),
+                updateCustomerDTO.getUsername(),
+                updateCustomerDTO.getFirstName(),
+                updateCustomerDTO.getLastName(),
+                updateCustomerDTO.getPostalCode(),
+                updateCustomerDTO.getCity(),
+                updateCustomerDTO.getCompanyName()
+        ));
+    }
+
+    public Customer create(CustomerDTO createCustomerDTO){
+        return customerRepository.save(new Customer(
+                createCustomerDTO.getUsername(),
+                createCustomerDTO.getFirstName(),
+                createCustomerDTO.getLastName(),
+                createCustomerDTO.getPostalCode(),
+                createCustomerDTO.getCity(),
+                createCustomerDTO.getCompanyName()
+        ));
     }
 }
