@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CustomerServiceTest {
@@ -102,8 +102,8 @@ public class CustomerServiceTest {
             CustomerDTO createCustomerDTO = new CustomerDTO("newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
             Customer expectSave = new Customer(
                     createCustomerDTO.getUsername(),
-                    createCustomerDTO.getFirstName(),
-                    createCustomerDTO.getLastName(),
+                    createCustomerDTO.getFirstname(),
+                    createCustomerDTO.getLastname(),
                     createCustomerDTO.getPostalCode(),
                     createCustomerDTO.getCity(),
                     createCustomerDTO.getCompanyName()
@@ -122,6 +122,20 @@ public class CustomerServiceTest {
             assertEquals(expectedCustomer.getPostalCode(), result.getPostalCode());
             assertEquals(expectedCustomer.getCity(), result.getCity());
             assertEquals(expectedCustomer.getCompanyName(), result.getCompanyName());
+        }
+    }
+    @Nested
+    class delete{
+        @Test
+        void shouldDeleteCustomer() {
+            Integer id = 1;
+            Customer existingCustomer = new Customer(id, LocalDateTime.now(), "oldUsername", "oldFirst", "oldLast", "00000", "OldCity", "OldCompany");
+
+            when(customerRepository.findById(id)).thenReturn(Optional.of(existingCustomer));
+
+            customerService.delete(1);
+
+            verify(customerRepository, times(1)).delete(existingCustomer);
         }
     }
 }

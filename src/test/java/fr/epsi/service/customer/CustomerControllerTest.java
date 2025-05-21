@@ -15,9 +15,9 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CustomerController.class)
@@ -122,4 +122,25 @@ public class CustomerControllerTest {
                     .andExpect(content().string("Customer 999 not found"));
         }
     }
+    @Nested
+    class deleteCustomersById{
+        @Test
+        void shouldDeleteCustomers() throws Exception {
+
+            mockMvc.perform(delete("/api/customers/1"))
+                    .andExpect(status().isNoContent());
+        }
+        @Test
+        void shouldReturnNotFoundWhenCustomerDoesNotExist() throws Exception {
+            Integer id = 999;
+
+            doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer 999 not found"))
+                    .when(customerService).delete(id);
+
+            mockMvc.perform(delete("/api/customers/999"))
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().string("Customer 999 not found"));
+        }
+    }
+
 }

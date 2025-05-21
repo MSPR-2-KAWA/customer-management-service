@@ -9,8 +9,8 @@ import lombok.Value;
 public class CustomerDTO {
 
     String username;
-    String firstName;
-    String lastName;
+    String firstname;
+    String lastname;
     String postalCode;
     String city;
     String companyName;

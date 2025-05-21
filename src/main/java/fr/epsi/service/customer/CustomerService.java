@@ -29,8 +29,8 @@ public class CustomerService {
                 dbCustomer.getId(),
                 dbCustomer.getCreatedAt(),
                 updateCustomerDTO.getUsername(),
-                updateCustomerDTO.getFirstName(),
-                updateCustomerDTO.getLastName(),
+                updateCustomerDTO.getFirstname(),
+                updateCustomerDTO.getLastname(),
                 updateCustomerDTO.getPostalCode(),
                 updateCustomerDTO.getCity(),
                 updateCustomerDTO.getCompanyName()
@@ -40,11 +40,17 @@ public class CustomerService {
     public Customer create(CustomerDTO createCustomerDTO){
         return customerRepository.save(new Customer(
                 createCustomerDTO.getUsername(),
-                createCustomerDTO.getFirstName(),
-                createCustomerDTO.getLastName(),
+                createCustomerDTO.getFirstname(),
+                createCustomerDTO.getLastname(),
                 createCustomerDTO.getPostalCode(),
                 createCustomerDTO.getCity(),
                 createCustomerDTO.getCompanyName()
         ));
+    }
+
+    public void delete(Integer id){
+        Customer dbCustomer = getById(id);
+
+        customerRepository.delete(dbCustomer);
     }
 }
