@@ -139,17 +139,7 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <excludes>
-                        <exclude>fr/epsi/service/dto/**</exclude>
-                        <exclude>fr/epsi/service/customer/dto/**</exclude>
-                        <exclude>fr/epsi/service/customer/Customer.java</exclude>
-                        <exclude>fr/epsi/service/customer/Customer.class</exclude>
-                    </excludes>
-                </configuration>
             </plugin>
-
         </plugins>
     </build>
-
 </project>
