@@ -49,7 +49,6 @@ public class CustomerControllerTest {
                     .andExpect(jsonPath("$[2].username").value("username3"));
         }
     }
-
     @Nested
     class getCustomersById{
         @Test
@@ -70,7 +69,6 @@ public class CustomerControllerTest {
                     .andExpect(content().string("Customer 999 not found"));
         }
     }
-
     @Nested
     class updateCustomerById{
         @Test
@@ -120,6 +118,35 @@ public class CustomerControllerTest {
                                 """))
                     .andExpect(status().isNotFound())
                     .andExpect(content().string("Customer 999 not found"));
+        }
+    }
+    @Nested
+    class createCustomer{
+        @Test
+        void shouldCreateCustomerAndReturnIt() throws Exception {
+            Customer createCustomer = new Customer(1, LocalDateTime.now(), "newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
+
+            when(customerService.create(any(CustomerDTO.class))).thenReturn(createCustomer);
+
+            mockMvc.perform(post("/api/customers")
+                            .contentType("application/json")
+                            .content("""
+                                    {
+                                        "username": "newUsername",
+                                        "firstName": "newFirst",
+                                        "lastName": "newLast",
+                                        "postalCode": "12345",
+                                        "city": "NewCity",
+                                        "companyName": "NewCompany"
+                                    }
+                                    """))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.username").value("newUsername"))
+                    .andExpect(jsonPath("$.firstName").value("newFirst"))
+                    .andExpect(jsonPath("$.lastName").value("newLast"))
+                    .andExpect(jsonPath("$.postalCode").value("12345"))
+                    .andExpect(jsonPath("$.city").value("NewCity"))
+                    .andExpect(jsonPath("$.companyName").value("NewCompany"));
         }
     }
     @Nested

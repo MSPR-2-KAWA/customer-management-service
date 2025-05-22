@@ -143,7 +143,7 @@
                     <excludes>
                         <exclude>fr/epsi/service/dto/**</exclude>
                         <exclude>fr/epsi/service/customer/dto/**</exclude>
-                        <exclude>fr/epsi/service/customer/Customer.class</exclude>
+                        <exclude>fr/epsi/service/customer/Customer*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
