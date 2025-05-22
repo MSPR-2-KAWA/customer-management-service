@@ -1,6 +1,6 @@
 package fr.epsi.service.customer;
 
-import fr.epsi.service.customer.dto.CustomerDTO;
+import fr.epsi.service.customer.dto.CustomerDto;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,7 +73,7 @@ public class CustomerServiceTest {
 
             Integer id = 1;
             Customer existingCustomer = new Customer(id, LocalDateTime.now(), "oldUsername", "oldFirst", "oldLast", "00000", "OldCity", "OldCompany");
-            CustomerDTO updateDto = new CustomerDTO("newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
+            CustomerDto updateDto = new CustomerDto("newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
             Customer expectedCustomer = new Customer(id, existingCustomer.getCreatedAt(), "newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
 
             when(customerRepository.findById(id)).thenReturn(Optional.of(existingCustomer));
@@ -99,20 +99,20 @@ public class CustomerServiceTest {
 
             Integer id = 1;
             Customer expectedCustomer = new Customer(id, LocalDateTime.now(), "newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
-            CustomerDTO createCustomerDTO = new CustomerDTO("newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
+            CustomerDto createCustomerDto = new CustomerDto("newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
             Customer expectSave = new Customer(
-                    createCustomerDTO.getUsername(),
-                    createCustomerDTO.getFirstname(),
-                    createCustomerDTO.getLastname(),
-                    createCustomerDTO.getPostalCode(),
-                    createCustomerDTO.getCity(),
-                    createCustomerDTO.getCompanyName()
+                    createCustomerDto.getUsername(),
+                    createCustomerDto.getFirstname(),
+                    createCustomerDto.getLastname(),
+                    createCustomerDto.getPostalCode(),
+                    createCustomerDto.getCity(),
+                    createCustomerDto.getCompanyName()
             );
 
 
             when(customerRepository.save(expectSave)).thenReturn(expectedCustomer);
 
-            Customer result = customerService.create(createCustomerDTO);
+            Customer result = customerService.create(createCustomerDto);
 
             assertEquals(expectedCustomer.getId(), result.getId());
             assertEquals(expectedCustomer.getCreatedAt(), result.getCreatedAt());

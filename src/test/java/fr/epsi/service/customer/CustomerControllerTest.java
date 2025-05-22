@@ -1,6 +1,6 @@
 package fr.epsi.service.customer;
 
-import fr.epsi.service.customer.dto.CustomerDTO;
+import fr.epsi.service.customer.dto.CustomerDto;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +76,7 @@ public class CustomerControllerTest {
             Integer id = 1;
             Customer updatedCustomer = new Customer(id, LocalDateTime.now(), "newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
 
-            when(customerService.update(eq(id), any(CustomerDTO.class))).thenReturn(updatedCustomer);
+            when(customerService.update(eq(id), any(CustomerDto.class))).thenReturn(updatedCustomer);
 
              mockMvc.perform(put("/api/customers/1")
                             .contentType("application/json")
@@ -101,7 +101,7 @@ public class CustomerControllerTest {
         @Test
         void shouldReturnNotFoundWhenCustomerDoesNotExist() throws Exception {
             Integer id = 999;
-            when(customerService.update(eq(id), any(CustomerDTO.class)))
+            when(customerService.update(eq(id), any(CustomerDto.class)))
                     .thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer 999 not found"));
 
             mockMvc.perform(put("/api/customers/999")
@@ -126,7 +126,7 @@ public class CustomerControllerTest {
         void shouldCreateCustomerAndReturnIt() throws Exception {
             Customer createCustomer = new Customer(1, LocalDateTime.now(), "newUsername", "newFirst", "newLast", "12345", "NewCity", "NewCompany");
 
-            when(customerService.create(any(CustomerDTO.class))).thenReturn(createCustomer);
+            when(customerService.create(any(CustomerDto.class))).thenReturn(createCustomer);
 
             mockMvc.perform(post("/api/customers")
                             .contentType("application/json")

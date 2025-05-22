@@ -6,7 +6,7 @@ import lombok.Value;
 
 @Value
 @AllArgsConstructor
-public class CustomerDTO {
+public class CustomerDto {
 
     String username;
     String firstname;

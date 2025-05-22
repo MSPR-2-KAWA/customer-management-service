@@ -1,6 +1,6 @@
 package fr.epsi.service.customer;
 
-import fr.epsi.service.customer.dto.CustomerDTO;
+import fr.epsi.service.customer.dto.CustomerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +25,13 @@ public class CustomerController {
     }
 
     @PutMapping("/api/customers/{id}")
-    public Customer updateCustomerById(@PathVariable Integer id, @RequestBody CustomerDTO updateCustomerDTO){
-        return customerService.update(id, updateCustomerDTO);
+    public Customer updateCustomerById(@PathVariable Integer id, @RequestBody CustomerDto updateCustomerDto){
+        return customerService.update(id, updateCustomerDto);
     }
 
     @PostMapping("/api/customers")
-    public Customer createCustomer(@RequestBody CustomerDTO createCustomerDTO){
-        return customerService.create(createCustomerDTO);
+    public Customer createCustomer(@RequestBody CustomerDto createCustomerDto){
+        return customerService.create(createCustomerDto);
     }
 
     @DeleteMapping("/api/customers/{id}")

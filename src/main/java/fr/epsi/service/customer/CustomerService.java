@@ -1,6 +1,6 @@
 package fr.epsi.service.customer;
 
-import fr.epsi.service.customer.dto.CustomerDTO;
+import fr.epsi.service.customer.dto.CustomerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,28 +23,28 @@ public class CustomerService {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer " + id + " not found"));
     }
 
-    public Customer update(Integer id, CustomerDTO updateCustomerDTO) {
+    public Customer update(Integer id, CustomerDto updateCustomerDto) {
         Customer dbCustomer = getById(id);
         return customerRepository.save(new Customer(
                 dbCustomer.getId(),
                 dbCustomer.getCreatedAt(),
-                updateCustomerDTO.getUsername(),
-                updateCustomerDTO.getFirstname(),
-                updateCustomerDTO.getLastname(),
-                updateCustomerDTO.getPostalCode(),
-                updateCustomerDTO.getCity(),
-                updateCustomerDTO.getCompanyName()
+                updateCustomerDto.getUsername(),
+                updateCustomerDto.getFirstname(),
+                updateCustomerDto.getLastname(),
+                updateCustomerDto.getPostalCode(),
+                updateCustomerDto.getCity(),
+                updateCustomerDto.getCompanyName()
         ));
     }
 
-    public Customer create(CustomerDTO createCustomerDTO){
+    public Customer create(CustomerDto createCustomerDto){
         return customerRepository.save(new Customer(
-                createCustomerDTO.getUsername(),
-                createCustomerDTO.getFirstname(),
-                createCustomerDTO.getLastname(),
-                createCustomerDTO.getPostalCode(),
-                createCustomerDTO.getCity(),
-                createCustomerDTO.getCompanyName()
+                createCustomerDto.getUsername(),
+                createCustomerDto.getFirstname(),
+                createCustomerDto.getLastname(),
+                createCustomerDto.getPostalCode(),
+                createCustomerDto.getCity(),
+                createCustomerDto.getCompanyName()
         ));
     }
 
