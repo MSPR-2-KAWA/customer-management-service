@@ -24,6 +24,11 @@ public class CustomerController {
         return customerService.getById(id);
     }
 
+    @PostMapping
+    public List<Customer> getCustomersByIds(@RequestBody List<Integer> ids) {
+        return customerService.getByIds(ids);
+    }
+
     @PutMapping("/api/customers/{id}")
     public Customer updateCustomerById(@PathVariable Integer id, @RequestBody CustomerDto updateCustomerDto){
         return customerService.update(id, updateCustomerDto);
