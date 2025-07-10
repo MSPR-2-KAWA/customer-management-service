@@ -23,6 +23,11 @@ public class CustomerService {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer " + id + " not found"));
     }
 
+    public List<Customer> getByIds(List<Integer> ids) {
+        return customerRepository.findAllById(ids);
+    }
+
+
     public Customer update(Integer id, CustomerDto updateCustomerDto) {
         Customer dbCustomer = getById(id);
         return customerRepository.save(new Customer(
